@@ -15,22 +15,45 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { authClient } from "../uth_client"; // স্পেলিং চেক করুন: auth_client কি না?
 
 export default function RegisterPage() {
   const router = useRouter();
 
-  const handlerLoginForm = (e: any) => {
+  const handlerLoginForm = async (e: any) => {
     e.preventDefault();
 
+    // ইনপুট ফিল্ড থেকে ডাটা সংগ্রহ
+    const name = e.target.name.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    toast.success("You're registered successfully! Please sign in to continue.");
-    console.log("register details:", { email, password });
-
-    router.push("/auth/login");
-    
-    
+    // Better Auth signUp কল
+    await authClient.signUp.email(
+      {
+        email: email,       // হার্ডকোডেড ভ্যালুর বদলে ইনপুট ভ্যালু ব্যবহার করা হলো
+        password: password, 
+        name: name,
+      },
+      {
+        // রিকোয়েস্ট শুরু হওয়ার সময় (ঐচ্ছিক)
+        onRequest: () => {
+          toast.loading("Registering your account...");
+        },
+        onSuccess: (ctx) => {
+          toast.dismiss(); // লোডিং টোস্ট সরানো
+          toast.success("Sign up successful!");
+          
+          // সফল হলে লগইন পেজে পাঠানো
+          router.push("/auth/login");
+        },
+        onError: (ctx) => {
+          toast.dismiss();
+          toast.error(ctx.error.message || "Invalid information");
+          console.log("Auth Error:", ctx.error.message);
+        },
+      }
+    );
   };
 
   return (
@@ -55,6 +78,16 @@ export default function RegisterPage() {
         <CardContent>
           <form onSubmit={handlerLoginForm}>
             <div className="flex flex-col gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="name">Name</Label>
+                <Input
+                  id="name"
+                  name="name" // name প্রপার্টিটি Better Auth এর জন্য প্রয়োজন
+                  type="text"
+                  placeholder="Enter your name"
+                  required
+                />
+              </div>
 
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
@@ -68,9 +101,7 @@ export default function RegisterPage() {
               </div>
 
               <div className="grid gap-2">
-                <div className="flex items-center">
-                  <Label htmlFor="password">Iqama</Label>
-                </div>
+                <Label htmlFor="password">Password (Iqama)</Label>
                 <Input
                   id="password"
                   name="password"
@@ -82,18 +113,12 @@ export default function RegisterPage() {
 
               <div className="flex flex-col gap-2 ">
                 <Button type="submit" className="w-full cursor-pointer">
-                  Sing Up
+                  Sign Up
                 </Button>
-
-                {/* <Button variant="outline" type="button" className="w-full cursor-pointer">
-                  Login with Iqama Number
-                </Button> */}
-
               </div>
             </div>
           </form>
         </CardContent>
-
         <CardFooter />
       </Card>
     </div>
