@@ -15,34 +15,60 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { authClient } from "../uth_client"; // স্পেলিং চেক করুন uth নাকি auth
 
 export default function LoginPage() {
   const router = useRouter();
 
-  const handlerLoginForm = (e: any) => {
+  const handlerLoginForm = async (e: any) => {
     e.preventDefault();
 
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    toast.success("You have successfully logged in.");
-    console.log("Login details:", { email, password });
+    try {
+      await authClient.signIn.email(
+        {
+          email: email,
+          password: password,
+        },
+        {
+          onRequest: () => {
+            toast.loading("Verifying credentials...");
+          },
 
-    router.push("/dashboard");
+          onSuccess: () => {
+            toast.dismiss();
+            toast.success("Successfully logged in!");
 
+            console.log("Logged in successfully");
 
+            router.push("/dashboard");
+          },
+
+          onError: (ctx) => {
+            toast.dismiss();
+            toast.error(ctx.error.message || "Invalid email or password");
+            console.error("Login Error:", ctx.error.message);
+          },
+        }
+      );
+    } catch (err) {
+      toast.dismiss();
+      toast.error("Something went wrong. Please try again.");
+      console.error("Internal Error:", err);
+    }
   };
 
   return (
     <div className="flex min-h-screen bg-slate-100 items-center justify-center">
       <Card className="w-full max-w-sm">
         <CardHeader>
-
           <CardTitle className="text-lg text-teal-700 font-bold">
             Darkstone Portal
           </CardTitle>
 
-          <CardDescription className="">
+          <CardDescription>
             Enter your email below to login to your account
           </CardDescription>
 
@@ -56,7 +82,6 @@ export default function LoginPage() {
         <CardContent>
           <form onSubmit={handlerLoginForm}>
             <div className="flex flex-col gap-4">
-
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -70,13 +95,13 @@ export default function LoginPage() {
 
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="password">Iqama</Label>
-                  <a
+                  <Label htmlFor="password">Password (Iqama)</Label>
+                  <Link
                     href="#"
                     className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                   >
                     Forgot Iqama number?
-                  </a>
+                  </Link>
                 </div>
                 <Input
                   id="password"
@@ -91,15 +116,10 @@ export default function LoginPage() {
                 <Button type="submit" className="w-full cursor-pointer">
                   Login
                 </Button>
-
-                {/* <Button variant="outline" type="button" className="w-full cursor-pointer">
-                  Login with Iqama Number
-                </Button> */}
               </div>
             </div>
           </form>
         </CardContent>
-
         <CardFooter />
       </Card>
     </div>
