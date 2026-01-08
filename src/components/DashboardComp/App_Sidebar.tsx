@@ -1,19 +1,5 @@
-"use client"
+"use client";
 
-import { 
-  Home, 
-  Users, 
-  UserPlus, 
-  Briefcase, 
-  FileText, 
-  Bell, 
-  Settings, 
-  LayoutDashboard, 
-  ClipboardList,
-  ShieldCheck,
-  Package,
-  FileSignature // নতুন আইকন ইমপোর্ট করা হয়েছে
-} from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -23,85 +9,74 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar
+  useSidebar,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { IoMdClose } from "react-icons/io";
 import { usePathname } from "next/navigation";
+import useRole from "@/hooks/useRole";
 
-
-const adminRoutes = [
-  { title: "Admin Overview", url: "/dashboard/admin", icon: ShieldCheck },
-  { title: "All Employees", url: "/dashboard/admin/all-employees", icon: Users },
-  { title: "Register Employee", url: "/dashboard/admin/add-new", icon: UserPlus },
-  { title: "Company Assets", url: "/dashboard/admin/assets", icon: Package },
-  { title: "Settings", url: "/dashboard/admin/settings", icon: Settings },
-];
-
-const managerRoutes = [
-  { title: "Team Dashboard", url: "/dashboard/manager", icon: LayoutDashboard },
-  { title: "My Team", url: "/dashboard/manager/team", icon: Users },
-  { title: "Performance Reports", url: "/dashboard/manager/reports", icon: ClipboardList },
-  { title: "Leave Approvals", url: "/dashboard/manager/approvals", icon: Bell },
-];
-
-const employeeRoutes = [
-  { title: "My Profile", url: "/dashboard/employee", icon: Home },
-  { title: "My Assets", url: "/dashboard/employee/my-assets", icon: Package }, 
-  { title: "agreement", url: "/dashboard/employee/agreement", icon: FileSignature }, 
-  { title: "Reports & Pay", url: "/dashboard/employee/reports", icon: FileText },
-  { title: "Notifications", url: "/dashboard/employee/notifications", icon: Bell },
-];
-
-
-
-export function App_Sidebar(
-  
-  { userRole = "employee" }: { userRole?: "admin" | "manager" | "employee" }) {
+export function App_Sidebar() {
   const { setOpenMobile } = useSidebar();
+  
   const pathname = usePathname();
 
-  let menuItems = employeeRoutes;
-  if (userRole === "admin") menuItems = adminRoutes;
-  if (userRole === "manager") menuItems = managerRoutes;
+  const { menuItems, isLoading, role } = useRole();
 
+  if (isLoading) {
+    return (
+      <div className="p-6 text-sm text-slate-500 animate-pulse">Loading...</div>
+    );
+  }
 
   return (
-    <Sidebar className="border">
+    <Sidebar className="border-r">
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="text-gray-800 flex items-center justify-between rounded-none border-b py-7">
-            <h2 className="font-bold text-xl">Darkstone Portal</h2>
+          <SidebarGroupLabel className="text-gray-800 flex items-center justify-between rounded-none border-b py-7 px-4">
+            <div>
+              <h2 className="font-bold text-xl ">Darkstone Portal</h2>
 
-            <button 
-              onClick={() => setOpenMobile(false)} 
-              className="lg:hidden cursor-pointer text-slate-500 hover:text-slate-800 transition bg-slate-200 rounded-full p-1"
+              <span className="text-[13px] text-gray-700 py-1 semibold uppercase  leading-none">
+                {role} mode
+              </span>
+
+            </div>
+
+            <button
+              onClick={() => setOpenMobile(false)}
+              className="lg:hidden cursor-pointer text-slate-500 hover:text-slate-800 transition bg-slate-100 rounded-full p-1.5"
             >
               <IoMdClose size={20} />
             </button>
           </SidebarGroupLabel>
 
           <SidebarGroupContent>
-            <SidebarMenu className="pt-5 px-2">
+            <SidebarMenu className="pt-6 px-3">
               {menuItems.map((item) => {
                 const isActive = pathname === item.url;
 
                 return (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                      <Link 
-                        href={item.url} 
-                        className={`py-6 text-lg px-3 capitalize flex items-center gap-3 transition-all rounded-md group ${
-                          isActive 
-                            ? "bg-slate-200 text-blue-600 font-semibold " 
-                            : "hover:bg-slate-50 text-slate-800 font-medium"
+                      <Link
+                        href={item.url}
+                        className={`py-6 text-lg px-4 capitalize flex items-center gap-3 transition-all rounded-lg group ${
+                          isActive
+                            ? "bg-blue-50 text-blue-600 font-semibold "
+                            : "hover:bg-slate-50 text-slate-700 font-medium"
                         }`}
                         onClick={() => setOpenMobile(false)}
                       >
-                        <item.icon className={`h-7 w-7 transition-colors ${
-                          isActive ? "text-blue-600" : "text-slate-500 group-hover:text-slate-800"
-                        }`} />
-                        <span className="text-md">{item.title}</span>
+                        <item.icon
+                          className={`h-6 w-6 transition-colors ${
+                            isActive
+                              ? "text-blue-600"
+                              : "text-slate-400 group-hover:text-slate-700"
+                          }`}
+                        />
+
+                        <span className="text-[16px]">{item.title}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

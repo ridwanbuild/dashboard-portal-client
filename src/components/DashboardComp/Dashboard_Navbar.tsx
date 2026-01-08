@@ -14,21 +14,23 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { authClient } from "@/app/auth/uth_client";
+import useRole from "@/hooks/useRole";
 
 export default function Dashboard_Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  
-  const userRole = "Admin";
-
 
   const router = useRouter();
-  const handlerLogout = () => {
+
+  const { isLoading, role } = useRole();
+
+  if (isLoading) return <div>Loading...</div>;
+
+  const handlerLogout = async () => {
+    await authClient.signOut();
     router.push("/auth/login");
     toast.success("Logged out successfully. Please log in again.");
   };
-
-
-
 
   return (
     <nav className="flex items-center justify-between w-full   relative">
@@ -45,7 +47,7 @@ export default function Dashboard_Navbar() {
               <p className="text-sm font-semibold text-slate-800 leading-none">
                 John Doe
               </p>
-              <p className="text-xs text-slate-500 capitalize">{userRole}</p>
+              <p className="text-xs text-slate-500 capitalize"> {role} </p>
             </div>
 
             {/* Profile Circle */}
@@ -65,7 +67,7 @@ export default function Dashboard_Navbar() {
             <div className="absolute right-0 mt-3 w-56 bg-white border border-slate-200 rounded-lg shadow-xl z-50 overflow-hidden animate-in fade-in zoom-in duration-200">
               <div className="px-4 py-3 border-b bg-slate-50/50">
                 <p className="text-sm font-bold text-slate-900">John Doe</p>
-                <p className="text-xs text-slate-500">john@example.com</p>
+                <p className="text-xs text-slate-500"> john@example.com </p>
               </div>
 
               <div className="p-1">
@@ -73,9 +75,10 @@ export default function Dashboard_Navbar() {
                   <Settings className="h-4 w-4" />
                   Settings
                 </button>
+
                 <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 rounded-md transition-colors">
                   <ShieldCheck className="h-4 w-4" />
-                  Role: {userRole}
+                  Role: {role}
                 </button>
               </div>
 

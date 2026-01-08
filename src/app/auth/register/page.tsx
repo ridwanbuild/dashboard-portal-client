@@ -35,8 +35,8 @@ export default function RegisterPage() {
         password: password, 
         name: name,
       },
+
       {
-        
         onRequest: () => {
           toast.loading("Registering your account...");
         },
@@ -59,9 +59,10 @@ export default function RegisterPage() {
 
   return (
     <div className="flex min-h-screen bg-slate-100 items-center justify-center">
+
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle className="text-lg text-teal-700 font-bold">
+          <CardTitle className="text-lg text-gray-600 font-bold">
             Darkstone Portal
           </CardTitle>
 
