@@ -8,7 +8,6 @@ export default function DashboardPage() {
       <p className="text-slate-500 mt-2"> success dashobard </p>
 
 
-
     </div>
   )
 }

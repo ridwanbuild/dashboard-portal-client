@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { authClient } from "../uth_client"; // স্পেলিং চেক করুন: auth_client কি না?
+import { authClient } from "../uth_client"; 
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -23,7 +23,7 @@ export default function RegisterPage() {
   const handlerLoginForm = async (e: any) => {
     e.preventDefault();
 
-    // ইনপুট ফিল্ড থেকে ডাটা সংগ্রহ
+   
     const name = e.target.name.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
@@ -31,27 +31,28 @@ export default function RegisterPage() {
     // Better Auth signUp কল
     await authClient.signUp.email(
       {
-        email: email,       // হার্ডকোডেড ভ্যালুর বদলে ইনপুট ভ্যালু ব্যবহার করা হলো
+        email: email,       
         password: password, 
         name: name,
       },
       {
-        // রিকোয়েস্ট শুরু হওয়ার সময় (ঐচ্ছিক)
+        
         onRequest: () => {
           toast.loading("Registering your account...");
         },
+
         onSuccess: (ctx) => {
-          toast.dismiss(); // লোডিং টোস্ট সরানো
+          toast.dismiss(); 
           toast.success("Sign up successful!");
-          
-          // সফল হলে লগইন পেজে পাঠানো
           router.push("/auth/login");
         },
+        
         onError: (ctx) => {
           toast.dismiss();
-          toast.error(ctx.error.message || "Invalid information");
+          toast.error("Invalid information, Please try again!");
           console.log("Auth Error:", ctx.error.message);
         },
+
       }
     );
   };

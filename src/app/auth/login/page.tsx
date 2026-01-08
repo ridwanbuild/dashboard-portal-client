@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { authClient } from "../uth_client"; // স্পেলিং চেক করুন uth নাকি auth
+import { authClient } from "../uth_client"; 
 
 export default function LoginPage() {
   const router = useRouter();
@@ -40,17 +40,21 @@ export default function LoginPage() {
           onSuccess: () => {
             toast.dismiss();
             toast.success("Successfully logged in!");
-
             console.log("Logged in successfully");
-
             router.push("/dashboard");
+
           },
 
           onError: (ctx) => {
             toast.dismiss();
-            toast.error(ctx.error.message || "Invalid email or password");
+            
+            toast.error("Invalid email or password");
             console.error("Login Error:", ctx.error.message);
           },
+
+
+
+
         }
       );
     } catch (err) {

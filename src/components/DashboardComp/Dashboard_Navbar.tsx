@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import { MdKeyboardBackspace } from "react-icons/md";
 
-
 import {
   Sun,
   User,
@@ -18,26 +17,24 @@ import toast from "react-hot-toast";
 
 export default function Dashboard_Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  
   const userRole = "Admin";
 
-  const router = useRouter()
+
+  const router = useRouter();
   const handlerLogout = () => {
-
-
-    router.push("/auth/login")
+    router.push("/auth/login");
     toast.success("Logged out successfully. Please log in again.");
+  };
 
-  }
+
+
 
   return (
     <nav className="flex items-center justify-between w-full   relative">
-      <div className="text-sm font-medium text-slate-500">
-        Dashboard
-      </div>
+      <div className="text-sm font-medium text-slate-500">Dashboard</div>
 
       <div className="flex items-center gap-4">
-      
-
         {/* Profile Section */}
         <div className="relative border-l pl-4">
           <div
@@ -83,12 +80,13 @@ export default function Dashboard_Navbar() {
               </div>
 
               <div className="p-1 border-t">
-
-                <button onClick={handlerLogout} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md transition-colors">
+                <button
+                  onClick={handlerLogout}
+                  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                >
                   <LogOut className="h-4 w-4" />
                   Logout
                 </button>
-
               </div>
             </div>
           )}
@@ -97,11 +95,9 @@ export default function Dashboard_Navbar() {
         <div className=" text-slate-500 hover:text-slate-600 transition-all p-1">
           <Link className="" href={"/"}>
             {" "}
-            <MdKeyboardBackspace  size={25} />
+            <MdKeyboardBackspace size={25} />
           </Link>
         </div>
-
-
       </div>
     </nav>
   );
