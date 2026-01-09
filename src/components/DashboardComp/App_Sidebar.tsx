@@ -18,7 +18,7 @@ import useRole from "@/hooks/useRole";
 
 export function App_Sidebar() {
   const { setOpenMobile } = useSidebar();
-  
+
   const pathname = usePathname();
 
   const { menuItems, isLoading, role } = useRole();
@@ -28,6 +28,9 @@ export function App_Sidebar() {
       <div className="p-6 text-sm text-slate-500 animate-pulse">Loading...</div>
     );
   }
+
+
+
 
   return (
     <Sidebar className="border-r">
@@ -61,10 +64,10 @@ export function App_Sidebar() {
                     <SidebarMenuButton asChild>
                       <Link
                         href={item.url}
-                        className={`py-6 text-lg px-4 capitalize flex items-center gap-3 transition-all rounded-lg group ${
+                        className={`py-5 text-[12px] px-4 capitalize flex items-center gap-3 transition-all rounded-lg group ${
                           isActive
-                            ? "bg-blue-50 text-blue-600 font-semibold "
-                            : "hover:bg-slate-50 text-slate-700 font-medium"
+                            ? "bg-blue-50 text-blue-600 font-normal "
+                            : "hover:bg-slate-50 text-slate-700 font-normal"
                         }`}
                         onClick={() => setOpenMobile(false)}
                       >

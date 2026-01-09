@@ -1,6 +1,19 @@
-import { 
-  Home, Users, UserPlus, Settings, LayoutDashboard, 
-  ClipboardList, Bell, ShieldCheck, Package, FileSignature, FileText 
+import {
+  Home,
+  Users,
+  UserPlus,
+  Settings,
+  LayoutDashboard,
+  ClipboardList,
+  Bell,
+  ShieldCheck,
+  Package,        // For physical assets
+  FileSignature,  // For signing/agreements
+  Heart,          // For Happiness center
+  FileText,       // For documents/reports
+  CheckSquare,    // For approvals
+  Briefcase,      // For Team/Managerial work
+  UserCog         // For Admin/Settings
 } from "lucide-react";
 
 export type SidebarItem = {
@@ -13,20 +26,28 @@ export const sidebarRoutes: Record<string, SidebarItem[]> = {
   admin: [
     { title: "Admin Overview", url: "/dashboard/admin", icon: ShieldCheck },
     { title: "All Employees", url: "/dashboard/admin/all-employees", icon: Users },
-    { title: "Register Employee", url: "/dashboard/admin/add-new", icon: UserPlus },
-    { title: "Company Assets", url: "/dashboard/admin/assets", icon: Package },
+    { title: "Add New", url: "/dashboard/admin/add-new", icon: UserPlus },
+    { title: "Assets", url: "/dashboard/admin/company-assets", icon: Package },
+    { title: "Agreements", url: "/dashboard/admin/company-agreements", icon: FileText },
+    { title: "Happiness center", url: "/dashboard/admin/happiness-center", icon: Heart },
     { title: "Settings", url: "/dashboard/admin/settings", icon: Settings },
   ],
+
   manager: [
-    { title: "Team Dashboard", url: "/dashboard/manager", icon: LayoutDashboard },
+    { title: "Manager Overview", url: "/dashboard/manager", icon: LayoutDashboard },
     { title: "My Team", url: "/dashboard/manager/team", icon: Users },
+    { title: "Agreements", url: "/dashboard/manager/manager-agreements", icon: FileText },
+    { title: "Assets", url: "/dashboard/manager/manager-assets", icon: Package },
     { title: "Performance Reports", url: "/dashboard/manager/reports", icon: ClipboardList },
-    { title: "Leave Approvals", url: "/dashboard/manager/approvals", icon: Bell },
+    { title: "Leave Approvals", url: "/dashboard/manager/approvals", icon: CheckSquare },
   ],
+
   employee: [
-    { title: "My Profile", url: "/dashboard/employee", icon: Home },
-    { title: "My Assets", url: "/dashboard/employee/my-assets", icon: Package }, 
-    { title: "Agreement", url: "/dashboard/employee/agreement", icon: FileSignature }, 
+    { title: "Employee Overview", url: "/dashboard/employee", icon: Home },
+    { title: "My Assets", url: "/dashboard/employee/employee-assets", icon: Package },
+    { title: "Agreement", url: "/dashboard/employee/employee-agreement", icon: FileSignature },
+  
+    { title: "Happiness", url: "/dashboard/employee/employee-happiness", icon: Heart },
     { title: "Reports & Pay", url: "/dashboard/employee/reports", icon: FileText },
     { title: "Notifications", url: "/dashboard/employee/notifications", icon: Bell },
   ],

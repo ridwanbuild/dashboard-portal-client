@@ -22,7 +22,7 @@ export default function Dashboard_Navbar() {
 
   const router = useRouter();
 
-  const { isLoading, role } = useRole();
+  const { user, isLoading, role } = useRole();
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -44,8 +44,8 @@ export default function Dashboard_Navbar() {
             onClick={() => setIsOpen(!isOpen)}
           >
             <div className="text-right hidden md:block">
-              <p className="text-sm font-semibold text-slate-800 leading-none">
-                John Doe
+              <p className="text-sm font-medium capitalize text-slate-800 leading-none">
+                Name:{user?.name}
               </p>
               <p className="text-xs text-slate-500 capitalize"> {role} </p>
             </div>
@@ -66,8 +66,8 @@ export default function Dashboard_Navbar() {
           {isOpen && (
             <div className="absolute right-0 mt-3 w-56 bg-white border border-slate-200 rounded-lg shadow-xl z-50 overflow-hidden animate-in fade-in zoom-in duration-200">
               <div className="px-4 py-3 border-b bg-slate-50/50">
-                <p className="text-sm font-bold text-slate-900">John Doe</p>
-                <p className="text-xs text-slate-500"> john@example.com </p>
+                <p className="text-sm font-bold text-slate-900 capitalize"> {user?.name} </p>
+                <p className="text-xs text-slate-500"> {user?.email} </p>
               </div>
 
               <div className="p-1">
