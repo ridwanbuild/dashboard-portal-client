@@ -1,75 +1,69 @@
 "use client";
 
-import React, { useState } from 'react';
-import { 
-  UserPlus, 
-  ArrowLeft, 
-  User, 
-  Mail, 
-  Building2, 
-  Banknote, 
+import React, { useState } from "react";
+import {
+  UserPlus,
+  ArrowLeft,
+  User,
+  Mail,
+  Building2,
+  Banknote,
   ShieldCheck,
-  Loader2
-} from 'lucide-react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+  Loader2,
+} from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function AddNewEmployee() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  
+
   // Form States based on your Prisma Schema
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    role: 'USER',
-    departments: '',
-    salary: '',
+    name: "",
+    email: "",
+    role: "USER",
+    departments: "",
+    salary: "",
   });
 
   // const handleSubmit = async (e: React.FormEvent) => {
   //   e.preventDefault();
   //   setLoading(true);
 
-  //   // try {
-  //   //   const response = await fetch('dashboard-portal-server-production.up.railway.app/admin/register', {
-  //   //     method: 'POST',
-  //   //     headers: { 'Content-Type': 'application/json' },
-  //   //     body: JSON.stringify(formData),
-  //   //   });
+  // try {
+  //   const response = await fetch('https://dashboard-portal-server-production.up.railway.app/admin/register', {
+  //     method: 'POST',
+  //     headers: { 'Content-Type': 'application/json' },
+  //     body: JSON.stringify(formData),
+  //   });
 
-  //   //   const result = await response.json();
-  //   //   if (result.success) {
-  //   //     router.push('/dashboard/admin/all-employees'); // Success হলে লিস্টে পাঠিয়ে দিবে
-  //   //   }
-  //   // } catch (error) {
-  //   //   console.error("Registration failed:", error);
-  //   // } finally {
-  //   //   setLoading(false);
-  //   // }
+  //   const result = await response.json();
+  //   if (result.success) {
+  //     router.push('/dashboard/admin/all-employees'); // Success হলে লিস্টে পাঠিয়ে দিবে
+  //   }
+  // } catch (error) {
+  //   console.error("Registration failed:", error);
+  // } finally {
+  //   setLoading(false);
+  // }
 
   // };
 
-
-
   return (
     <div className="">
-      
       {/* Navigation Header */}
       <div className="mb-4 flex items-center justify-between">
-
-        <Link 
-          href="/dashboard/admin/all-employees" 
+        <Link
+          href="/dashboard/admin/all-employees"
           className="flex items-center gap-2 text-slate-500 hover:text-teal-600 transition-colors text-sm font-medium"
         >
           <ArrowLeft className="w-4 h-4" /> Back to Employees
         </Link>
-
       </div>
 
       {/* Form Card */}
       <div className="bg-white border border-slate-200 rounded-md shadow-sm overflow-hidden">
-        
         {/* Card Header with Double Icon */}
         <div className="p-6 border-b border-slate-100 bg-slate-50/50">
           <div className="flex items-center gap-4">
@@ -78,14 +72,17 @@ export default function AddNewEmployee() {
               <ShieldCheck className="absolute text-teal-600 w-5 h-5 mt-3 ml-5" />
             </div>
             <div>
-              <h1 className="text-xl font-semibold text-slate-800">Register Employee</h1>
-              <p className="text-xs text-slate-500 font-normal mt-0.5">Setup a new member for the 2026 workforce</p>
+              <h1 className="text-xl font-semibold text-slate-800">
+                Register Employee
+              </h1>
+              <p className="text-xs text-slate-500 font-normal mt-0.5">
+                Setup a new member for the 2026 workforce
+              </p>
             </div>
           </div>
         </div>
 
-        <form  className="p-6 space-y-5">
-          
+        <form className="p-6 space-y-5">
           {/* Name Field */}
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
@@ -96,7 +93,9 @@ export default function AddNewEmployee() {
               type="text"
               placeholder="e.g. John Doe"
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all placeholder:text-slate-400"
-              onChange={(e) => setFormData({...formData, name: e.target.value})}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
             />
           </div>
 
@@ -110,7 +109,9 @@ export default function AddNewEmployee() {
               type="email"
               placeholder="name@company.com"
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all"
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
             />
           </div>
 
@@ -124,20 +125,25 @@ export default function AddNewEmployee() {
                 type="text"
                 placeholder="e.g. Marketing"
                 className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all"
-                onChange={(e) => setFormData({...formData, departments: e.target.value})}
+                onChange={(e) =>
+                  setFormData({ ...formData, departments: e.target.value })
+                }
               />
             </div>
 
             {/* Salary */}
             <div className="space-y-1.5">
               <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-                <Banknote className="w-3.5 h-3.5 text-slate-400" /> Monthly Salary
+                <Banknote className="w-3.5 h-3.5 text-slate-400" /> Monthly
+                Salary
               </label>
               <input
                 type="number"
                 placeholder="0.00"
                 className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all"
-                onChange={(e) => setFormData({...formData, salary: e.target.value})}
+                onChange={(e) =>
+                  setFormData({ ...formData, salary: e.target.value })
+                }
               />
             </div>
           </div>
@@ -149,7 +155,9 @@ export default function AddNewEmployee() {
             </label>
             <select
               className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20 focus:border-teal-500 transition-all appearance-none cursor-pointer"
-              onChange={(e) => setFormData({...formData, role: e.target.value})}
+              onChange={(e) =>
+                setFormData({ ...formData, role: e.target.value })
+              }
               defaultValue="USER"
             >
               <option value="USER">Standard Employee</option>
@@ -160,8 +168,6 @@ export default function AddNewEmployee() {
 
           {/* Submit Button */}
           <div className="pt-4">
-
-
             <button
               disabled={loading}
               type="submit"
@@ -169,16 +175,13 @@ export default function AddNewEmployee() {
             >
               {loading ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" /> 
+                  <Loader2 className="w-4 h-4 animate-spin" />
                   Registering...
                 </>
               ) : (
-                'Create Employee Account'
+                "Create Employee Account"
               )}
             </button>
-
-
-
           </div>
         </form>
       </div>

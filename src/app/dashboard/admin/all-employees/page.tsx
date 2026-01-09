@@ -41,7 +41,7 @@ export default function AllEmployeesPage() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("dashboard-portal-server-production.up.railway.app/admin/all-users");
+        const response = await fetch("https://dashboard-portal-server-production.up.railway.app/admin/all-users");
         const result = await response.json();
         if (result.success) setUsers(result.data);
       } catch (error) {

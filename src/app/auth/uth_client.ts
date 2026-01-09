@@ -2,7 +2,7 @@ import { createAuthClient } from "better-auth/react";
 import { adminClient } from "better-auth/client/plugins";
 
 export const authClient = createAuthClient({
-  baseURL: "dashboard-portal-server-production.up.railway.app",
+  baseURL: "https://dashboard-portal-server-production.up.railway.app",
 
   plugins: [adminClient()],
 });
