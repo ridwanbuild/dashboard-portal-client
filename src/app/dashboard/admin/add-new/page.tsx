@@ -27,27 +27,28 @@ export default function AddNewEmployee() {
     salary: '',
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setLoading(true);
 
-    try {
-      const response = await fetch('dashboard-portal-server-production.up.railway.app/admin/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+  //   // try {
+  //   //   const response = await fetch('dashboard-portal-server-production.up.railway.app/admin/register', {
+  //   //     method: 'POST',
+  //   //     headers: { 'Content-Type': 'application/json' },
+  //   //     body: JSON.stringify(formData),
+  //   //   });
 
-      const result = await response.json();
-      if (result.success) {
-        router.push('/dashboard/admin/all-employees'); // Success হলে লিস্টে পাঠিয়ে দিবে
-      }
-    } catch (error) {
-      console.error("Registration failed:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  //   //   const result = await response.json();
+  //   //   if (result.success) {
+  //   //     router.push('/dashboard/admin/all-employees'); // Success হলে লিস্টে পাঠিয়ে দিবে
+  //   //   }
+  //   // } catch (error) {
+  //   //   console.error("Registration failed:", error);
+  //   // } finally {
+  //   //   setLoading(false);
+  //   // }
+
+  // };
 
 
 
@@ -83,7 +84,7 @@ export default function AddNewEmployee() {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+        <form  className="p-6 space-y-5">
           
           {/* Name Field */}
           <div className="space-y-1.5">
