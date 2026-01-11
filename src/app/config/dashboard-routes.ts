@@ -30,6 +30,7 @@ export const sidebarRoutes: Record<string, SidebarItem[]> = {
     { title: "Assets", url: "/dashboard/admin/company-assets", icon: Package },
     { title: "Agreements", url: "/dashboard/admin/company-agreements", icon: FileText },
     { title: "Happiness center", url: "/dashboard/admin/happiness-center", icon: Heart },
+    { title: "User Info", url: "/dashboard/admin/all-user", icon: Settings },
     { title: "Settings", url: "/dashboard/admin/settings", icon: Settings },
   ],
 

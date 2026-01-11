@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { authClient } from "../uth_client"; 
+import { authClient } from "../uth_client";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -42,19 +42,14 @@ export default function LoginPage() {
             toast.success("Successfully logged in!");
             console.log("Logged in successfully");
             router.push("/dashboard");
-
           },
 
           onError: (ctx) => {
             toast.dismiss();
-            
+
             toast.error("Invalid email or password");
             console.error("Login Error:", ctx.error.message);
           },
-
-
-
-
         }
       );
     } catch (err) {
@@ -123,6 +118,27 @@ export default function LoginPage() {
               </div>
             </div>
           </form>
+
+    <div className="mt-2 p-4 bg-slate-50 border border-slate-200 rounded-xl">
+
+  <div className="space-y-2">
+    <div className="grid grid-cols-1 gap-1">
+      {['admin@gmail.com', 'manger@gmail.com', 'employee@gmail.com'].map((email) => (
+        <div key={email} className="flex justify-between items-center group">
+          <span className="text-xs text-slate-800 font-normal">{email}</span>
+          <span className="text-[10px] text-slate-800 font-mono bg-white px-1.5 py-0.5 rounded border border-slate-100">
+            123456789
+          </span>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+
+
+
+
         </CardContent>
         <CardFooter />
       </Card>

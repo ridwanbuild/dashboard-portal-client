@@ -13,42 +13,70 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export default function AddNewEmployee() {
+  
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  // Form States based on your Prisma Schema
+  // Form States based on your updated Prisma Schema
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    role: "USER",
+    role: "EMPLOYEE", // Default role
     departments: "",
     salary: "",
   });
 
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   setLoading(true);
+ 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
 
-  // try {
-  //   const response = await fetch('https://dashboard-portal-server-production.up.railway.app/admin/register', {
-  //     method: 'POST',
-  //     headers: { 'Content-Type': 'application/json' },
-  //     body: JSON.stringify(formData),
-  //   });
+    try {
+      // Calling your updated backend endpoint
+      const response = await fetch('http://localhost:5000/api/employee', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
 
-  //   const result = await response.json();
-  //   if (result.success) {
-  //     router.push('/dashboard/admin/all-employees'); // Success হলে লিস্টে পাঠিয়ে দিবে
-  //   }
-  // } catch (error) {
-  //   console.error("Registration failed:", error);
-  // } finally {
-  //   setLoading(false);
-  // }
 
-  // };
+        credentials: 'include',
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          role: formData.role,
+          // These fields will be handled by EmployeeProfile in your DB
+          departments: formData.departments,
+          salary: formData.salary,
+          age: "25",      // Placeholder or add to form
+          phone: "N/A",   // Placeholder or add to form
+          address: "N/A", // Placeholder or add to form
+        }),
+      });
+
+
+
+      const result = await response.json();
+
+      if (result.success) {
+        
+        router.push('/dashboard/admin/all-employees');
+      } else {
+        toast.success(result.message || "Registration failed");
+      }
+
+    } catch (error) {
+      console.error("Connection Error:", error);
+      toast.error("Could not connect to the server.");
+
+    } finally {
+      setLoading(false);
+    }
+
+
+  };
 
   return (
     <div className="">
@@ -82,7 +110,8 @@ export default function AddNewEmployee() {
           </div>
         </div>
 
-        <form className="p-6 space-y-5">
+        {/* Form Submission linked to handleSubmit */}
+        <form onSubmit={handleSubmit} className="p-6 space-y-5">
           {/* Name Field */}
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
@@ -134,8 +163,7 @@ export default function AddNewEmployee() {
             {/* Salary */}
             <div className="space-y-1.5">
               <label className="text-sm font-medium text-slate-700 flex items-center gap-2">
-                <Banknote className="w-3.5 h-3.5 text-slate-400" /> Monthly
-                Salary
+                <Banknote className="w-3.5 h-3.5 text-slate-400" /> Monthly Salary
               </label>
               <input
                 type="number"
@@ -158,15 +186,15 @@ export default function AddNewEmployee() {
               onChange={(e) =>
                 setFormData({ ...formData, role: e.target.value })
               }
-              defaultValue="USER"
+              defaultValue="EMPLOYEE"
             >
-              <option value="USER">Standard Employee</option>
+              <option value="EMPLOYEE">Standard Employee</option>
               <option value="MANAGER">Department Manager</option>
               <option value="ADMIN">System Administrator</option>
             </select>
           </div>
 
-          {/* Submit Button */}
+          {/* Submit Button with Loading Spinner */}
           <div className="pt-4">
             <button
               disabled={loading}
@@ -181,6 +209,8 @@ export default function AddNewEmployee() {
               ) : (
                 "Create Employee Account"
               )}
+
+
             </button>
           </div>
         </form>
