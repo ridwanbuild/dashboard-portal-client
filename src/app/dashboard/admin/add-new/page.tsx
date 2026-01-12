@@ -188,9 +188,12 @@ export default function AddNewEmployee() {
               }
               defaultValue="EMPLOYEE"
             >
-              <option value="EMPLOYEE">Standard Employee</option>
-              <option value="MANAGER">Department Manager</option>
-              <option value="ADMIN">System Administrator</option>
+              <option value="EMPLOYEE">Employee</option>
+              <option value="MANAGER">Manager</option>
+              <option value="ADMIN">Admin</option>
+
+                
+
             </select>
           </div>
 

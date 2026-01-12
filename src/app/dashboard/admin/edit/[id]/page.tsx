@@ -31,11 +31,12 @@ export default function EditEmployeeProfile() {
     const fetchEmployee = async () => {
       try {
         const response = await fetch(`http://localhost:5000/api/employee/${id}`, { 
-          credentials: "include", // Essential for Auth
+          credentials: "include",
         });
         const result = await response.json();
         if (result.success) {
           setEmployee(result.data);
+          // FIX: Default value logic
           setFormData({
             name: result.data.name || "",
             role: result.data.role || "EMPLOYEE",
@@ -66,11 +67,9 @@ export default function EditEmployeeProfile() {
     try {
       const response = await fetch(`http://localhost:5000/api/employee/${id}`, {
         method: "PATCH",
-        headers: { 
-          "Content-Type": "application/json" 
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
-        credentials: "include", // FIXED: Added this to prevent 401 error
+        credentials: "include", 
       });
 
       const result = await response.json();
@@ -80,7 +79,6 @@ export default function EditEmployeeProfile() {
         setIsEditing(false);
         toast.success("Profile updated successfully!", { id: tId });
       } else {
-        // This will now catch "You are not authorized" if the role is not ADMIN
         toast.error(result.message || "Unauthorized access", { id: tId });
       }
     } catch (error) {
@@ -99,7 +97,6 @@ export default function EditEmployeeProfile() {
       <Toaster position="top-right" />
       
       <div className="flex justify-between items-center mb-10">
-
         <Link href="/dashboard/admin/all-employees" className="flex py-4 items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors font-normal">
           <FaArrowLeft size={14} /> Back to Directory
         </Link>
@@ -114,7 +111,6 @@ export default function EditEmployeeProfile() {
       </div>
 
       <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-        {/* Profile Header */}
         <div className="p-10 bg-slate-50 border-b border-slate-200">
           <div className="flex items-center gap-8">
             <div className="w-24 h-24 bg-white border border-slate-200 rounded-2xl flex items-center justify-center text-slate-300 shadow-inner">
@@ -152,15 +148,15 @@ export default function EditEmployeeProfile() {
                       disabled={!isEditing}
                       className="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm font-normal focus:border-slate-400 outline-none transition-all disabled:bg-slate-50 disabled:text-slate-500 cursor-pointer"
                     >
-                      <option value="EMPLOYEE">Employee</option>
-                      <option value="MANAGER">Manager</option>
-                      <option value="ADMIN">Administrator</option>
+                      <option value="ADMIN">ADMIN</option>
+                      <option value="MANAGER">MANAGER</option>
+                      <option value="EMPLOYEE">EMPLOYEE</option>
                     </select>
                   </div>
 
                   <div className="grid grid-cols-2 gap-6">
                     <InputField label="Department" name="departments" value={formData.departments} icon={FaBuilding} isEditing={isEditing} onChange={handleChange} />
-                    <InputField label="Salary" name="salary" value={formData.salary} icon={FaMoneyBillWave} isEditing={isEditing} onChange={handleChange} type="number" />
+                    <InputField label="Salary" name="salary" value={formData.salary} icon={FaMoneyBillWave} isEditing={isEditing} onChange={handleChange} type="text" />
                   </div>
 
                   <InputField label="Phone" name="phone" value={formData.phone} icon={FaPhoneAlt} isEditing={isEditing} onChange={handleChange} />
@@ -169,13 +165,12 @@ export default function EditEmployeeProfile() {
               </section>
             </div>
 
-            {/* Assets & Happiness Section */}
-            <div className="lg:col-span-5 space-y-12">
+            <div className="lg:col-span-5 ">
               <section>
-                <h3 className="text-[11px] font-bold text-slate-700 uppercase border-b border-slate-100 pb-3 mb-6 flex items-center gap-2">
+                <h3 className="text-[11px] pt-4 font-bold text-slate-700 uppercase pb-3 flex items-center gap-2">
                   <FaClipboardList /> Hardware Assets
                 </h3>
-                <div className="space-y-3">
+                <div className="space-y-3 border rounded-md border-gray-400 p-2">
                   {employee?.assets?.length > 0 ? employee?.assets?.map((asset: any) => (
                     <div key={asset.id} className="p-4 border border-slate-100 rounded-lg flex justify-between items-center bg-slate-50/30">
                       <span className="text-sm font-normal text-slate-700 flex items-center gap-3"><FaLaptop className="text-slate-700" /> {asset.name}</span>
@@ -186,7 +181,7 @@ export default function EditEmployeeProfile() {
               </section>
 
               <section>
-                <h3 className="text-[11px] font-bold text-slate-700 uppercase border-b border-slate-100 pb-3 mb-6 flex items-center gap-2">
+                <h3 className="text-[11px] font-bold text-slate-700 uppercase border-b border-slate-100 pt-4 pb-3 mb-2 flex items-center gap-2">
                   <FaHeart className="text-rose-400" /> Happiness Survey
                 </h3>
                 <div className="space-y-4">
@@ -201,7 +196,6 @@ export default function EditEmployeeProfile() {
             </div>
           </div>
 
-          {/* Corrected Button UI */}
           {isEditing && (
             <div className="mt-16 pt-8 border-t border-slate-100 flex items-center justify-center gap-6">
               <button 
@@ -235,7 +229,7 @@ function InputField({ label, name, value, icon: Icon, isEditing, onChange, type 
         <input 
           type={type} 
           name={name} 
-          value={value} 
+          value={value} // This keeps the default value visible in input
           onChange={onChange} 
           className="w-full p-3 bg-white border border-slate-200 rounded-lg text-sm font-normal focus:border-slate-400 outline-none transition-all"
         />

@@ -1,187 +1,204 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
-  User, Briefcase, Laptop, FileText,
-  Heart, Mail, Phone, MapPin, Loader2,
-  Calendar, CheckCircle2, XCircle, ShieldCheck,
-  TrendingUp, Award
+  Laptop, ShieldCheck, Heart, Mail, ChevronRight,
+  User, Search, RefreshCw, DollarSign, Briefcase, 
+  MapPin, Calendar, ClipboardCheck
 } from "lucide-react";
+import Link from "next/link";
+import { useEmployees } from "@/hooks/useAllEmployee";
 
-export default function All_user_Info() {
-  const [userData, setUserData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+export default function AdminWorkforceOverview() {
+  const { employees, loading, refresh } = useEmployees();
+  const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    const fetchFullProfile = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/api/employee", {
-          credentials: "include",
-        });
-        
-        const result = await response.json();
-        if (result.success) {
-          setUserData(result.data);
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchFullProfile();
-  }, []);
+  const filteredData = employees?.filter((user: any) =>
+    user.name?.toLowerCase().includes(search.toLowerCase()) ||
+    user.email?.toLowerCase().includes(search.toLowerCase())
+  );
 
   if (loading) return (
-    <div className="flex h-screen items-center justify-center bg-slate-50">
-      <div className="text-center">
-        <Loader2 className="w-10 h-10 animate-spin text-teal-600 mx-auto mb-4" />
-        <p className="text-slate-500 font-medium">Loading 2026 Workspace...</p>
+    <div className="flex h-screen items-center justify-center bg-white font-sans">
+      <div className="flex flex-col items-center gap-3">
+        <div className="w-6 h-6 border-2 border-slate-900 border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-sm text-slate-500 font-medium">Syncing Intelligence Hub...</p>
       </div>
     </div>
   );
 
-  if (!userData) return <div className="p-10 text-center">User not found.</div>;
-
   return (
-    <div className="max-w-7xl mx-auto space-y-6 p-6 bg-slate-50/50 min-h-screen">
+    <div className="p-8 bg-[#F8FAFC] min-h-screen font-sans text-slate-700">
       
-      {/* --- TOP HEADER & QUICK STATS --- */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Profile Summary Card */}
-        <div className="lg:col-span-2 bg-white p-8 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row gap-6 items-center">
-          <div className="relative">
-            <div className="w-28 h-28 bg-gradient-to-tr from-teal-500 to-emerald-400 rounded-2xl flex items-center justify-center text-white shadow-lg rotate-3">
-              <User size={56} className="-rotate-3" />
-            </div>
-            {userData.emailVerified && (
-              <div className="absolute -bottom-2 -right-2 bg-white p-1 rounded-full shadow-md">
-                <CheckCircle2 className="text-emerald-500 w-6 h-6" />
-              </div>
-            )}
-          </div>
-          <div className="flex-1 text-center md:text-left space-y-2">
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
-              <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">{userData.name}</h1>
-              <span className="px-3 py-1 bg-teal-100 text-teal-700 text-xs font-bold rounded-lg border border-teal-200 uppercase tracking-wider">
-                {userData.role}
-              </span>
-            </div>
-            <div className="flex flex-col sm:flex-row gap-4 text-slate-500 text-sm">
-              <span className="flex items-center gap-1.5"><Mail size={16} /> {userData.email}</span>
-              <span className="flex items-center gap-1.5"><Calendar size={16} /> Joined {new Date(userData.createdAt).toLocaleDateString()}</span>
-            </div>
-          </div>
+      {/* 2026 Header Section */}
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-10 gap-6">
+        <div>
+          <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">Workforce Intelligence</h1>
+          <p className="text-sm text-slate-500 mt-1 font-normal">Monitoring assignments, compliance, and employee well-being across departments.</p>
         </div>
-
-        {/* Quick Insight Stats */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center text-center">
-            <TrendingUp className="text-teal-500 mb-2" size={24} />
-            <span className="text-2xl font-bold text-slate-800">{userData.assets?.length || 0}</span>
-            <span className="text-xs text-slate-400 font-medium">Active Assets</span>
+        
+        <div className="flex items-center gap-4 w-full lg:w-auto">
+          <div className="relative flex-1 lg:w-72">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+            <input 
+              type="text"
+              placeholder="Search by name or email..."
+              className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-sm outline-none focus:border-slate-400 transition-all shadow-sm"
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center text-center">
-            <Award className="text-orange-500 mb-2" size={24} />
-            <span className="text-2xl font-bold text-slate-800">{userData.agreement?.length || 0}</span>
-            <span className="text-xs text-slate-400 font-medium">Agreements</span>
-          </div>
+          <button 
+            onClick={() => refresh()} 
+            className="flex items-center gap-2 px-4 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-medium hover:bg-slate-800 transition-all shadow-lg shadow-slate-200"
+          >
+            <RefreshCw size={14} /> Update Sync
+          </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        
-        {/* 1. Work & Salary Details */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="p-5 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
-            <h2 className="font-bold text-slate-800 flex items-center gap-2"><Briefcase className="text-teal-600" size={18} /> Work Profile</h2>
-            <ShieldCheck size={16} className="text-slate-300" />
-          </div>
-          <div className="p-6  text-sm">
-            <div className="flex justify-between items-center">
-              <span className="text-slate-500">Primary Department</span>
-              <span className="font-semibold px-2 py-0.5 bg-slate-100 rounded text-slate-700">{userData.employeeProfile?.departments || "N/A"}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-slate-500">Monthly Remuneration</span>
-              <span className="font-bold text-teal-600 text-lg">${userData.employeeProfile?.salary || "0"}</span>
-            </div>
-            <div className="pt-4 space-y-3 border-t border-slate-50">
-               <div className="flex items-center gap-3 text-slate-600">
-                  <div className="p-2 bg-slate-100 rounded-lg"><Phone size={14} /></div>
-                  <span>{userData.employeeProfile?.phone || "No phone added"}</span>
-               </div>
-               <div className="flex items-center gap-3 text-slate-600">
-                  <div className="p-2 bg-slate-100 rounded-lg"><MapPin size={14} /></div>
-                  <span className="truncate">{userData.employeeProfile?.address || "No address provided"}</span>
-               </div>
-            </div>
-          </div>
+      {/* Main Container */}
+      <div className="bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-100/50 overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left">
+            <thead>
+              <tr className="bg-slate-50/50 border-b border-slate-100">
+                <th className="p-5 text-[11px] font-semibold text-slate-400 uppercase tracking-[1px]">Staff Member</th>
+                <th className="p-5 text-[11px] font-semibold text-slate-400 uppercase tracking-[1px]">Contract & Salary</th>
+                <th className="p-5 text-[11px] font-semibold text-slate-400 uppercase tracking-[1px]">Hardware Inventory</th>
+                <th className="p-5 text-[11px] font-semibold text-slate-400 uppercase tracking-[1px]">Compliance</th>
+                <th className="p-5 text-[11px] font-semibold text-slate-400 uppercase tracking-[1px]">Engagement</th>
+                <th className="p-5 text-[11px] font-semibold text-slate-400 uppercase tracking-[1px] text-right">Details</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-50">
+              {filteredData?.map((user: any) => (
+                <tr key={user.id} className="hover:bg-slate-50/40 transition-all group">
+                  
+                  {/* Staff Info with Profile Image */}
+                  <td className="p-5">
+                    <div className="flex items-center gap-4">
+                      <div className="relative">
+                        <div className="w-11 h-11 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-500 border border-slate-200 overflow-hidden shadow-sm">
+                          {user.image ? <img src={user.image} alt="" className="w-full h-full object-cover" /> : <User size={20} />}
+                        </div>
+                        <div className={`absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full border-2 border-white ${user.banned ? 'bg-rose-500' : 'bg-emerald-500'}`}></div>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-slate-800 leading-none">{user.name || "Unnamed Staff"}</p>
+                        <p className="text-[11px] text-slate-400 mt-2 flex items-center gap-1.5 font-normal">
+                          <Mail size={12} className="text-slate-300" /> {user.email}
+                        </p>
+                      </div>
+                    </div>
+                  </td>
+
+                  {/* Salary & Department (from EmployeeProfile) */}
+                  <td className="p-5">
+                    <div className="space-y-1.5">
+                      <div className="flex items-center gap-1.5 text-xs text-slate-700 font-medium">
+                        <Briefcase size={13} className="text-slate-400" /> 
+                        {user.employeeProfile?.departments || "Unassigned"}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-md font-semibold border border-blue-100">
+                          {user.role}
+                        </span>
+                        <span className="text-[11px] text-emerald-600 font-medium flex items-center gap-0.5">
+                          <DollarSign size={10} />{user.employeeProfile?.salary || "0"}
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+
+                  {/* Assets Count & Names */}
+                  <td className="p-5">
+                    <div className="flex flex-wrap gap-1.5">
+                      {user.assets && user.assets.length > 0 ? (
+                        <>
+                          {user.assets.slice(0, 1).map((asset: any) => (
+                            <span key={asset.id} className="inline-flex items-center gap-1.5 bg-slate-50 text-slate-600 text-[10px] px-2.5 py-1 rounded-lg border border-slate-100">
+                              <Laptop size={11} className="text-indigo-400" /> {asset.name}
+                            </span>
+                          ))}
+                          {user.assets.length > 1 && (
+                            <span className="text-[10px] bg-slate-100 text-slate-500 px-2 py-1 rounded-lg font-medium">
+                              +{user.assets.length - 1} more
+                            </span>
+                          )}
+                        </>
+                      ) : (
+                        <span className="text-[10px] text-slate-300 italic font-normal tracking-wide">No assets assigned</span>
+                      )}
+                    </div>
+                  </td>
+
+                  {/* Agreements/Compliance */}
+                  <td className="p-5">
+                    <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border ${user.agreement?.length > 0 ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-rose-50 text-rose-500 border-rose-100'}`}>
+                      <ClipboardCheck size={12} />
+                      <span className="text-[10px] font-semibold uppercase tracking-wider">
+                        {user.agreement?.length > 0 ? `${user.agreement.length} Signed` : "Pending"}
+                      </span>
+                    </div>
+                  </td>
+
+                  {/* Happiness Sentiment Indicator */}
+                  <td className="p-5">
+                    <div className="flex flex-col gap-1.5">
+                      <div className="flex items-center gap-2">
+                        <Heart 
+                          size={14} 
+                          className={user.happinessMessages?.length > 0 ? "text-rose-400 fill-rose-400" : "text-slate-200"} 
+                        />
+                        <span className="text-xs font-medium text-slate-700">{user.happinessMessages?.length || 0} Logs</span>
+                      </div>
+                      <div className="w-16 h-1 bg-slate-100 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-rose-400 rounded-full" 
+                          style={{ width: `${Math.min((user.happinessMessages?.length || 0) * 20, 100)}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  </td>
+
+                  {/* Action Button */}
+                  <td className="p-5 text-right">
+                    <Link
+                      href={`/dashboard/admin/view-details/${user.id}`}
+                      className="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-slate-200 text-slate-400 hover:text-slate-900 hover:border-slate-900 hover:bg-slate-50 transition-all group-hover:shadow-sm"
+                    >
+                      <ChevronRight size={18} />
+                    </Link>
+                  </td>
+
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
-        {/* 2. Inventory & Hardware */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="p-5 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
-            <h2 className="font-bold text-slate-800 flex items-center gap-2"><Laptop className="text-teal-600" size={18} /> Assets Assigned</h2>
-            <span className="text-[10px] font-bold bg-teal-600 text-white px-1.5 py-0.5 rounded uppercase">Inv v2.0</span>
+        {/* Empty State */}
+        {filteredData?.length === 0 && (
+          <div className="py-20 text-center">
+            <User size={40} className="mx-auto text-slate-200 mb-3" />
+            <p className="text-sm text-slate-400 font-medium">No workforce records found matching your search.</p>
           </div>
-          <div className="p-6">
-            {userData.assets?.length > 0 ? (
-              <div className="space-y-3">
-                {userData.assets.map((asset: any) => (
-                  <div key={asset.id} className="group p-3 hover:bg-teal-50 border border-slate-100 rounded-xl transition-all cursor-default">
-                    <p className="text-sm font-semibold text-slate-700">{asset.name}</p>
-                    <p className="text-[10px] text-slate-400 font-mono mt-1 uppercase tracking-tighter">S/N: {asset.serialNo}</p>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-8">
-                <div className="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-2 text-slate-300">
-                  <Laptop size={20} />
-                </div>
-                <p className="text-xs text-slate-400">No company hardware assigned.</p>
-              </div>
-            )}
+        )}
+      </div>
+
+      {/* Insight Footer */}
+      <div className="mt-6 flex flex-col sm:flex-row justify-between items-center px-2 gap-4">
+        <div className="flex gap-6">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+            <span className="text-[11px] text-slate-500 font-medium uppercase tracking-tight">Active Accounts</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-rose-500"></div>
+            <span className="text-[11px] text-slate-500 font-medium uppercase tracking-tight">Access Restricted</span>
           </div>
         </div>
-
-        {/* 3. Compliance & Feedback (Right Column) */}
-        <div className="space-y-6">
-          {/* Agreements Sub-card */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-             <div className="p-4 border-b border-slate-100 flex justify-between items-center">
-                <h3 className="font-bold text-sm text-slate-800 flex items-center gap-2"><FileText size={16} className="text-orange-500" /> Compliance</h3>
-             </div>
-             <div className="p-4 max-h-48 overflow-y-auto space-y-3">
-                {userData.agreement?.map((item: any) => (
-                  <div key={item.id} className="p-3 bg-orange-50/30 border-l-2 border-orange-400 rounded-r-lg">
-                    <p className="text-xs font-bold text-slate-700">{item.title}</p>
-                    <p className="text-[10px] text-orange-600/70 font-medium uppercase mt-0.5">{item.type}</p>
-                  </div>
-                ))}
-             </div>
-          </div>
-
-          {/* Feedback Sub-card */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-             <div className="p-4 border-b border-slate-100 flex justify-between items-center">
-                <h3 className="font-bold text-sm text-slate-800 flex items-center gap-2"><Heart size={16} className="text-pink-500" /> Happiness</h3>
-             </div>
-             <div className="p-4 space-y-4">
-
-                {userData.happinessMessages?.slice(0, 2).map((msg: any) => (
-                  <div key={msg.id} className="relative pl-4 border-l border-pink-100">
-                    <p className="text-[11px] font-bold text-slate-800">{msg.title}</p>
-                    <p className="text-[10px] text-slate-500 italic mt-1">"{msg.message.substring(0, 60)}..."</p>
-                  </div>
-                ))}
-
-
-             </div>
-          </div>
-        </div>
-
+        <p className="text-[11px] text-slate-400 font-normal">Data Integrity: Verified Secure Profile © 2026</p>
       </div>
     </div>
   );
