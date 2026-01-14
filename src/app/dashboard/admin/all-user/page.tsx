@@ -184,6 +184,8 @@ export default function AdminWorkforceOverview() {
             <p className="text-sm text-slate-400 font-medium">No workforce records found matching your search.</p>
           </div>
         )}
+
+        
       </div>
 
       {/* Insight Footer */}

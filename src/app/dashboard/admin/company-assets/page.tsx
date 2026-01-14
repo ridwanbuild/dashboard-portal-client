@@ -18,6 +18,7 @@ import toast, { Toaster } from "react-hot-toast";
 
 export default function Assets_managements() {
   const { assets, loading: assetsLoading, refreshAssets } = useAssets();
+  
   const { employees } = useEmployees();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const formRef = useRef<HTMLDivElement>(null);
